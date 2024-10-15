@@ -4,7 +4,7 @@ This script computes RMSE for 6 hourly FuXi outputs. It runs with config file
 ```
 python STEP02_RMSE_fuxi_6h.py 0 365
 ```
-where 0 and 365 are the first and the last initialization as in Python indexing.
+where 0 and 365 are the first and the last initialization.
 
 The script produces a netCDF4 file on `path_verif`.
 
