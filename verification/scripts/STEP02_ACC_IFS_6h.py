@@ -1,15 +1,15 @@
 '''
-This script computes ACC for 6 hourly FuXi outputs. It runs with config file
+This script computes ACC for 6 hourly IFS outputs. It runs with config file
 `verif_config_6h.yml` and ERA5 climatology file `ERA5_clim_1990_2019_6h_interp.nc`.
 The script verifies ACC on a given range of initializations:
 ```
-python STEP02_ACC_fuxi_6h.py 0 365
+python STEP02_ACC_IFS_6h.py 0 365
 ```
 where 0 and 365 are the first and the last initialization.
 
 The script produces a netCDF4 file on `path_verif`.
 
-Note: the script assumes coordinate names are `latitude` and `longitude`
+Note: all 'lat' coordinate names are renamed to 'latitude'
 '''
 
 import os
@@ -41,7 +41,7 @@ verif_ind_start = int(args['verif_ind_start'])
 verif_ind_end = int(args['verif_ind_end'])
 
 # ====================== #
-model_name = 'fuxi'
+model_name = 'IFS'
 lead_range = conf[model_name]['lead_range']
 verif_lead_range = conf[model_name]['verif_lead_range']
 
@@ -108,9 +108,10 @@ filename_OURS = filename_OURS[verif_ind_start:verif_ind_end]
 
 # ---------------------------------------------------------------------------------------- #
 # latitude weighting
-lat = xr.open_dataset(filename_OURS[0])["latitude"]
+lat = xr.open_dataset(filename_OURS[0])["lat"]
 w_lat = np.cos(np.deg2rad(lat))
 w_lat = w_lat / w_lat.mean()
+w_lat = w_lat.rename({'lat': 'latitude'})
 
 # ---------------------------------------------------------------------------------------- #
 # ACC compute
@@ -127,6 +128,12 @@ for fn_ours in filename_OURS:
     dayofyear = ds_ours['time.dayofyear']
     hourofday = ds_ours['time'].dt.hour
     ds_ours = ds_ours.load()
+
+    # rename coordinate name to latitude, longitude
+    if 'lat' in ds_ours.coords:
+        ds_ours = ds_ours.rename({'lat': 'latitude'})
+    if 'lon' in ds_ours.coords:
+        ds_ours = ds_ours.rename({'lon': 'longitude'})
     
     # --------------------------------------------------------------- #
     # get ERA5 verification target
@@ -144,7 +151,7 @@ for fn_ours in filename_OURS:
     ds_anomaly_OURS = ds_ours - ds_clim_target
     
     # ========================================== #
-    # anmalies --> ACC with latitude-based cosine weights (check sp_avg and w_lat)
+    # ACC with latitude-based cosine weights (check sp_avg and w_lat)
     top = sp_avg(ds_anomaly_OURS*ds_anomaly_ERA5, w_lat)
     
     bottom = np.sqrt(

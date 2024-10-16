@@ -1,9 +1,9 @@
 '''
-This script computes ACC for 6 hourly FuXi outputs. It runs with config file
+This script computes ACC for 6 hourly Wxformer outputs. It runs with config file
 `verif_config_6h.yml` and ERA5 climatology file `ERA5_clim_1990_2019_6h_interp.nc`.
 The script verifies ACC on a given range of initializations:
 ```
-python STEP02_ACC_fuxi_6h.py 0 365
+python STEP02_ACC_wxformer_6h.py 0 365
 ```
 where 0 and 365 are the first and the last initialization.
 
@@ -41,7 +41,7 @@ verif_ind_start = int(args['verif_ind_start'])
 verif_ind_end = int(args['verif_ind_end'])
 
 # ====================== #
-model_name = 'fuxi'
+model_name = 'wxformer'
 lead_range = conf[model_name]['lead_range']
 verif_lead_range = conf[model_name]['verif_lead_range']
 
@@ -158,3 +158,4 @@ ds_acc = xr.concat(acc_results, dim='days')
 # Save
 print('Save to {}'.format(path_verif))
 ds_acc.to_netcdf(path_verif)
+
