@@ -53,7 +53,7 @@ print('Verifying lead times: {}'.format(leads_verif))
 print('Verifying lead indices: {}'.format(ind_lead))
 # ====================== #
 
-path_verif = conf[model_name]['save_loc_verif']+'combined_acc_{}_{}_{}h_{}h_{}.nc'.format(
+path_verif = conf[model_name]['save_loc_verif']+'combined_acc_{:04d}_{:04d}_{:03d}h_{:03d}h_{}.nc'.format(
     verif_ind_start, verif_ind_end, verif_lead_range[0], verif_lead_range[-1], model_name)
 
 # ---------------------------------------------------------------------------------------- #

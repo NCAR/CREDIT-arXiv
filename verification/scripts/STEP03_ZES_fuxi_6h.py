@@ -61,7 +61,7 @@ variables_levels = conf['ERA5_ours']['verif_variables']
 varnames = list(variables_levels.keys())
 # ====================== #
 
-path_verif = conf[model_name]['save_loc_verif']+'combined_zes_{}_{}_{}'.format(
+path_verif = conf[model_name]['save_loc_verif']+'combined_zes_{:04d}_{:04d}_{}'.format(
     verif_ind_start, verif_ind_end, model_name)
 
 # ---------------------------------------------------------------------------------------- #
