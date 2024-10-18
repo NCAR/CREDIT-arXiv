@@ -1,6 +1,6 @@
 '''
 This script computes spatial correlation of model level upper air variables 
-[V, U, T, Q] on 6 hourly ERA5. It runs with config file `verif_config_6h.yml`. 
+[V, U, T, Q] on 6 hourly Wxformer. It runs with config file `verif_config_6h.yml`. 
 The script produces a netCDF4 file on `path_verif`.
 '''
 
@@ -33,27 +33,38 @@ args = vars(parser.parse_args())
 
 verif_ind_start = int(args['verif_ind_start'])
 verif_ind_end = int(args['verif_ind_end'])
-path_verif = conf['ERA5_ours']['save_loc_verif']+'spatial_corr_{:04d}_{:04d}_6h_ERA5.nc'.format(verif_ind_start, verif_ind_end)
+# ====================== #
+model_name = 'wxformer'
+lead_range = conf[model_name]['lead_range']
+verif_lead_range = [240,]
+
+leads_exist = list(np.arange(lead_range[0], lead_range[-1]+lead_range[0], lead_range[0]))
+leads_verif = list(np.arange(verif_lead_range[0], verif_lead_range[-1]+verif_lead_range[0], verif_lead_range[0]))
+ind_lead = vu.lead_to_index(leads_exist, leads_verif)
+
+print('Verifying lead times: {}'.format(leads_verif))
+print('Verifying lead indices: {}'.format(ind_lead))
+# ====================== #
+
+path_verif = conf[model_name]['save_loc_verif']+'spatial_corr_{:04d}_{:04d}_{:03d}h_{}.nc'.format(
+    verif_ind_start, verif_ind_end, verif_lead_range[0], model_name)
+
 # ---------------------------------------------------------------------------------------- #
-# ERA5 verif target
-filename_ERA5 = sorted(glob(conf['ERA5_ours']['save_loc']))
+filename_OURS = sorted(glob(conf[model_name]['save_loc_gather']+'*.nc'))
 
 # pick years
-year_range = conf['ERA5_ours']['year_range']
+year_range = conf[model_name]['year_range']
 years_pick = np.arange(year_range[0], year_range[1]+1, 1).astype(str)
-filename_ERA5 = [fn for fn in filename_ERA5 if any(year in fn for year in years_pick)]
+filename_OURS = [fn for fn in filename_OURS if any(year in fn for year in years_pick)]
+# filename_OURS = [fn for fn in filename_OURS if '00Z' in fn]
 
-# merge yearly ERA5 as one
-ds_ERA5 = [vu.get_forward_data(fn) for fn in filename_ERA5]
-ds_ERA5_merge = xr.concat(ds_ERA5, dim='time')
-    
-# select variables
+L_max = len(filename_OURS)
+assert verif_ind_end <= L_max, 'verified indices (days) exceeds the max index available'
+
+filename_OURS = filename_OURS[verif_ind_start:verif_ind_end]
 variables_levels = {'V': None, 'U': None, 'T': None, 'Q': None}
-ds_ERA5_merge = vu.ds_subset_everything(ds_ERA5_merge, variables_levels)
 
-# get level information
-levels = ds_ERA5_merge['level'].values
-
+# ---------------------------------------------------------------------------------------- #
 # allocate spatial corrlation on every 6 hour
 corr_ds_list = []
 
@@ -61,9 +72,16 @@ corr_ds_list = []
 var_4D = list(variables_levels.keys())
 
 # loop over 6 hourly indices
-for i_time in range(verif_ind_start, verif_ind_end):
+for idx, fn_ours in enumerate(filename_OURS):
     
-    ds_target = ds_ERA5_merge.isel(time=i_time).load()
+    ds_ours = xr.open_dataset(fn_ours)
+    ds_ours = vu.ds_subset_everything(ds_ours, variables_levels)
+    ds_ours = ds_ours.isel(time=ind_lead[0])
+    ds_ours = ds_ours.load()
+
+    if idx == 0:
+        # get level information
+        levels = ds_ours['level'].values
     
     # create a list of var with level info
     var_info = [(f"{varname}_{level_num}", varname, level_num) for varname in var_4D for level_num in levels]
@@ -84,11 +102,11 @@ for i_time in range(verif_ind_start, verif_ind_end):
         
         # var1
         varname1, var1, lev1 = var1_info
-        data_target1 = ds_target[var1].sel(level=lev1)
+        data_target1 = ds_ours[var1].sel(level=lev1)
 
         # var2
         varname2, var2, lev2 = var2_info
-        data_target2 = ds_target[var2].sel(level=lev2)
+        data_target2 = ds_ours[var2].sel(level=lev2)
         
         # convert to numpy and ravel
         data_target1 = data_target1.values.ravel()
@@ -111,9 +129,11 @@ for i_time in range(verif_ind_start, verif_ind_end):
     # Append the dataset to the list
     corr_ds_list.append(corr_ds)
 
-# concat all 6 hourly result and save
+# concat all 6 hourly result
 corr_ds_combined = xr.concat(corr_ds_list, dim='day')
 corr_ds_combined.to_netcdf(path_verif)
+
+
 
 
 

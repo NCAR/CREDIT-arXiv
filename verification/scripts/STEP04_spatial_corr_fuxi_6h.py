@@ -1,3 +1,9 @@
+'''
+This script computes spatial correlation of model level upper air variables 
+[V, U, T, Q] on 6 hourly FuXi. It runs with config file `verif_config_6h.yml`. 
+The script produces a netCDF4 file on `path_verif`.
+'''
+
 import os
 import sys
 import yaml
