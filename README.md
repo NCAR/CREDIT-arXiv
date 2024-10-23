@@ -17,7 +17,7 @@ Same as the main CREDIT repository.
 
 * `verification`: this folder contains verification steps for CREDIT model runs. It can be implemented as follows:
   * Copy `verif_config_template.yml` to `verif_config.yml` and modify it based on your file directories.
-  * Go through Jupyter notebooks from `STEP00` to `STEP02`.
+  * Go through Jupyter notebooks from `STEP00` to `STEP05`.
   * Access scripts folder for large-scale verification runs.
   * Note: the verification setup was primarily tested on the data analysis server of NSF NCAR: `casper.ucar.edu`.
 
