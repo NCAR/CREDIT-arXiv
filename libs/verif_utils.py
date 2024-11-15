@@ -224,7 +224,7 @@ def process_file_group(file_list, output_dir,
             
         # Save the dataset using NetCDF4 format
         # encoding = {var: {'zlib': True, 'complevel': 4} for var in ds.data_vars}
-        ds.to_netcdf(output_file, format='NETCDF4')
+        ds.to_netcdf(output_file, format='NETCDF4', mode='w')
         ds.close()
         print(f"Successfully saved combined dataset to {output_file}")
     
@@ -332,7 +332,7 @@ def process_file_group_safe(file_list, output_dir,
             ds_list.append(ds)
         
         # Concatenate datasets along 'time' dimension
-        ds = xr.concat(ds_list, dim='time', data_vars='minimal', coords='minimal', compat='override')
+        ds = xr.concat(ds_list, dim='time')
         
         # Ensure coordinate names are correct
         coord_mapping = {'datetime': 'time', 'lat': 'latitude', 'lon': 'longitude'}
@@ -342,7 +342,7 @@ def process_file_group_safe(file_list, output_dir,
                 
         # Save the dataset using NetCDF4 format
         # encoding = {var: {'zlib': True, 'complevel': 4} for var in ds.data_vars}
-        ds.to_netcdf(output_file, format='NETCDF4')  # , encoding=encoding
+        ds.to_netcdf(output_file, compute=True, format='NETCDF4', mode='w')  # , encoding=encoding
         ds.close()
         print(f"Successfully saved combined dataset to {output_file}")
         

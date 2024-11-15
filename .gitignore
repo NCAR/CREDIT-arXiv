@@ -1,7 +1,6 @@
 verification/qsub*
 verification/verif_config_6h.yml
 verification/verif_config_1h.yml
-verification/*1h*
 verification/scripts/*1h*
 visualization/plot_config.yml
 *.png
