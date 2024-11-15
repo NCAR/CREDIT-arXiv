@@ -36,7 +36,7 @@ verif_ind_end = int(args['verif_ind_end'])
 # ====================== #
 model_name = 'wxformer'
 lead_range = conf[model_name]['lead_range']
-verif_lead_range = [240,]
+verif_lead_range = [120,]
 
 leads_exist = list(np.arange(lead_range[0], lead_range[-1]+lead_range[0], lead_range[0]))
 leads_verif = list(np.arange(verif_lead_range[0], verif_lead_range[-1]+verif_lead_range[0], verif_lead_range[0]))

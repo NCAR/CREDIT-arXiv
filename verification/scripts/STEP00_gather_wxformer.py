@@ -65,10 +65,12 @@ flag_overall = False
 while flag_overall is False:
     
     flag_overall = True
+    
     for i in range(ind_start, ind_end):
-        # True: process can pass
-        flag = vu.process_file_group(all_files_list[i], output_dir, variables_levels, size_thres=9306171909)
-
-    flag_overall = flag_overall and flag
-
+        file_list = all_files_list[i]
+        
+        if len(file_list) >= 40:
+            flag = vu.process_file_group(file_list, output_dir, variables_levels, size_thres=9306171909)
+            flag_overall = flag_overall and flag
+            
 

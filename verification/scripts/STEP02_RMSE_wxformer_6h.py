@@ -69,9 +69,22 @@ ds_ERA5 = [vu.get_forward_data(fn) for fn in filename_ERA5]
 ds_ERA5_merge = xr.concat(ds_ERA5, dim='time')
     
 # Select the specified variables and their levels
-variables_levels = conf['ERA5_ours']['verif_variables']
+variables_levels = {
+    'U': [120,],
+    'V': [120,],
+    'T': [120,],
+    'Q': [120,],
+    'V500': None, 
+    'U500': None,
+    'T500': None,
+    'Q500': None,
+    'Z500': None,
+    'SP': None,
+    't2m': None
+}
 
 # subset merged ERA5 and unify coord names
+levels = ds_ERA5_merge['level'].values
 ds_ERA5_merge = vu.ds_subset_everything(ds_ERA5_merge, variables_levels)
 
 # ---------------------------------------------------------------------------------------- #
@@ -101,6 +114,7 @@ verif_results = []
 
 for fn_ours in filename_OURS:
     ds_ours = xr.open_dataset(fn_ours)
+    ds_ours['level'] = levels
     ds_ours = vu.ds_subset_everything(ds_ours, variables_levels)
     ds_ours = ds_ours.isel(time=ind_lead)
     ds_ours = ds_ours.compute()
@@ -119,7 +133,7 @@ ds_verif = xr.concat(verif_results, dim='days')
 
 # Save the combined dataset
 print('Save to {}'.format(path_verif))
-ds_verif.to_netcdf(path_verif)
+ds_verif.to_netcdf(path_verif, mode='w')
 
 
 
