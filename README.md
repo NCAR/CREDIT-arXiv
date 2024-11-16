@@ -1,55 +1,69 @@
-# CREDIT arXiv paper code repository
+# CREDIT arXiv Paper Code Repository
 
 ## About
 
-This repository hosts the main results of Community Research Earth Digital Intelligence Twin (CREDIT). 
-* Pre-print: https://arxiv.org/abs/2411.07814
+This repository hosts the main results of the Community Research Earth Digital Intelligence Twin (CREDIT).  
+* Preprint: https://arxiv.org/abs/2411.07814
 
-## Python environment
+## Python Environment
 
-Same as the main CREDIT repository.
+The Python environment is the same as in the main CREDIT repository.
 
-## Navigaition
+## Navigation
+
+* `data_preprocessing`: This folder contains scripts and Jupyter notebooks for the computation of z-score and residual normalization. Follow these steps:
+  * Copy `data_config_6h_template.yml` to `data_config_6h.yml` (similarly for `1h`) and modify it based on your file directories.
+  * Run through the Jupyter notebooks from `STEP00` to `STEP03`.
+  * Access the `scripts` folder for large-scale verification runs.
+    
+* `verification`: This folder contains verification steps for CREDIT model runs. Follow these steps:
+  * Copy `verif_config_6h_template.yml` to `verif_config_6h.yml` (similarly for `1h`) and modify it based on your file directories.
+  * Run through the Jupyter notebooks from `STEP00` to `STEP05`.
+  * Access the `scripts` folder for large-scale verification runs.
+
+* `visualization`: This folder hosts the results of the CREDIT arXiv paper. It is runnable once all verification outputs are prepared.
 
 * `libs`: A collection of functions/scripts used by this repository.
-  * `preprocess_utils.py`: functions purposed for the z-score and residual norm calculation.
-  * `verif_utils.py`: functions used for forecasts post-processing and verification.
-  * `score_utils.py`: function used for boostrapping and computing zonal energy spectrum.
-  * `graph_utils.py`: data visualization functions.
+  * `preprocess_utils.py`: Functions for z-score and residual normalization calculations.
+  * `verif_utils.py`: Functions for forecast post-processing and verification.
+  * `score_utils.py`: Functions for bootstrapping and computing the zonal energy spectrum.
+  * `graph_utils.py`: Functions for data visualization.
 
-* `verification`: this folder contains verification steps for CREDIT model runs. It can be implemented as follows:
-  * Copy `verif_config_6h_template.yml` to `verif_config_6h.yml` (same for `1h`) and modify it based on your file directories.
-  * Go through Jupyter notebooks from `STEP00` to `STEP05`.
-  * Access scripts folder for large-scale verification runs.
-  * Note: the verification setup was primarily tested on the data analysis server of NSF NCAR: `casper.ucar.edu`.
+## Production File Storage
 
- * `visualization`: this folder hosts results of the CREDIT arXive paper. It is runable when all verification outputs are prepared.
+If you have access to NCAR/UCAR HPCs, you can access production output files at the following locations:
 
-## Production file storage
-If you have access to NCAR/UCAR HPCs. You may visit production output files at:
 ```bash
 /glade/campaign/cisl/aiml/ksha/CREDIT_arXiv/GATHER/fuxi_6h_20241029/
 /glade/campaign/cisl/aiml/ksha/CREDIT_arXiv/GATHER/wxformer_6h_20241029/
 /glade/campaign/cisl/aiml/ksha/CREDIT_arXiv/GATHER/wxformer_1h_20241029/
 /glade/campaign/cisl/aiml/ksha/CREDIT_arXiv/GATHER/IFS/
 ```
+
 Verification results are available at:
+
 ```bash
 /glade/campaign/cisl/aiml/ksha/CREDIT_arXiv/VERIF/
 ```
+
 The pre-processed ERA5 and solar irradiance data (i.e., training and verification target) are available at:
+
 ```bash
 /glade/derecho/scratch/ksha/CREDIT_data/ERA5_mlevel_arXiv/SixHourly_y*
 /glade/campaign/cisl/aiml/wchapman/MLWPS/STAGING/y_TOTAL*
 ```
+
 ## Model weights
-Model weights are not stored in this repo, they can found at:
+
+Model weights are not stored in this repository. They can be found at the following locations:
+
 ```bash
 /glade/campaign/cisl/aiml/ksha/CREDIT_runs/arXiv_project/fuxi_6h/model_checkpoint.pt
 /glade/campaign/cisl/aiml/ksha/CREDIT_runs/arXiv_project/wxformer_6h/model_checkpoint.pt
 /glade/campaign/cisl/aiml/ksha/CREDIT_runs/arXiv_project/wxformer_1h/model_checkpoint.pt
 ```
-We will upload model weights online soon. Stay tuned.
+
+We will upload the model weights online soon. Stay tuned.
 
 ## Contact
 * John Schreck schreck@ucar.edu
