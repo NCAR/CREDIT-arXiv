@@ -2,7 +2,8 @@
 
 ## About
 
-This repository hosts the main results of Community Research Earth Digital Intelligence Twin (CREDIT). Pre-print: https://arxiv.org/abs/2411.07814
+This repository hosts the main results of Community Research Earth Digital Intelligence Twin (CREDIT). 
+* Pre-print: https://arxiv.org/abs/2411.07814
 
 ## Python environment
 
@@ -17,7 +18,7 @@ Same as the main CREDIT repository.
   * `graph_utils.py`: data visualization functions.
 
 * `verification`: this folder contains verification steps for CREDIT model runs. It can be implemented as follows:
-  * Copy `verif_config_template.yml` to `verif_config.yml` and modify it based on your file directories.
+  * Copy `verif_config_6h_template.yml` to `verif_config_6h.yml` (same for `1h`) and modify it based on your file directories.
   * Go through Jupyter notebooks from `STEP00` to `STEP05`.
   * Access scripts folder for large-scale verification runs.
   * Note: the verification setup was primarily tested on the data analysis server of NSF NCAR: `casper.ucar.edu`.
