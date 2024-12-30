@@ -36,7 +36,7 @@ If you have access to NCAR/UCAR HPCs, you can access production output files at 
 ```bash
 /glade/campaign/cisl/aiml/ksha/CREDIT_arXiv/GATHER/fuxi_6h_20241029/
 /glade/campaign/cisl/aiml/ksha/CREDIT_arXiv/GATHER/wxformer_6h_20241029/
-/glade/campaign/cisl/aiml/ksha/CREDIT_arXiv/GATHER/wxformer_1h_20241029/
+/glade/campaign/cisl/aiml/wchapman/CREDIT_arXiv/GATHER/wxformer_1h_20241228/
 /glade/campaign/cisl/aiml/ksha/CREDIT_arXiv/GATHER/IFS/
 ```
 
